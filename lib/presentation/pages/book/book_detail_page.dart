@@ -5,6 +5,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 import '../../../core/themes/theme.dart';
 import '../../widgets/rounded_button.dart';
+import 'viewmodel/book_detail_viewmodel.dart';
 
 class BookDetailPage extends ConsumerStatefulWidget {
   const BookDetailPage({super.key});
@@ -51,7 +52,9 @@ class _BookDetailPageState extends ConsumerState<BookDetailPage> {
               ],
             ),
             RoundedButton(
-              onPressed: () {},
+              onPressed: () {
+                ref.read(bookDetailViewModel).pinjamBuku(context);
+              },
               label: 'Pinjam Buku',
               horizontalPadding: 40,
             )
