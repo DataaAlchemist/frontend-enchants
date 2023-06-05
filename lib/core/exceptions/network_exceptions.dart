@@ -58,7 +58,7 @@ class NetworkExceptions with _$NetworkExceptions {
             case DioErrorType.receiveTimeout:
               networkExceptions = const NetworkExceptions.sendTimeout();
               break;
-            case DioErrorType.unknown:
+            case DioErrorType.badResponse:
               switch (error.response?.statusCode) {
                 case 409:
                   networkExceptions = const NetworkExceptions.conflict();

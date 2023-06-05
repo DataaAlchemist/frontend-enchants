@@ -1,13 +1,19 @@
-import 'dart:math';
-
-import 'package:book_store/core/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/exceptions/network_exceptions.dart';
+import '../../../../core/themes/theme.dart';
+import '../../../../infrastructure/repositories/authentication_repository.dart';
+
 final loginViewModel =
-    ChangeNotifierProvider.autoDispose((ref) => LoginViewModel());
+    ChangeNotifierProvider.autoDispose((ref) => LoginViewModel(ref));
 
 class LoginViewModel extends ChangeNotifier {
+  final Ref _ref;
+
+  LoginViewModel(this._ref);
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool isObscured = true;
 
@@ -17,25 +23,30 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void login(BuildContext context) async {
-    isLoading = true;
-    notifyListeners();
-
-    await Future.delayed(const Duration(seconds: 1));
-
-    isLoading = false;
-    notifyListeners();
-
-    // ignore: use_build_context_synchronously
-
-    if (Random().nextBool()) {
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacementNamed(context, '/home');
+    if (formKey.currentState?.validate() == false) {
       return;
     }
     
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      backgroundColor: orange500Color,
-      content: Text('Akun anda belum terdaftar'),
-    ));
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      await _ref.read(authenticationRepository).login(email: '', password: '');
+
+      // reset password visibility
+      isObscured = true;
+
+      // navigate to home
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pushReplacementNamed(context, '/home');
+    } on NetworkExceptions catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: orange500Color,
+        content: Text(e.message.toString()),
+      ));
+    }
+
+    isLoading = false;
+    notifyListeners();
   }
 }

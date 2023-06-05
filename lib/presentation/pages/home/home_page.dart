@@ -51,7 +51,9 @@ class _HomePageState extends ConsumerState<HomePage>
                   ),
                 ).expanded(),
                 EnchantIconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/notifications');
+                  },
                   icon: Icons.notifications_rounded,
                 ),
               ],

@@ -1,3 +1,4 @@
+import 'package:book_store/presentation/pages/notification/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +36,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryColor,
+          error: orange500Color,
+        ),
         fontFamily: 'Poppins',
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(
@@ -67,6 +71,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/register/genre': (context) => const RegisterGenrePage(),
         '/home': (context) => const MainPage(),
+        '/notifications': (context) => const NotificationPage(),
         '/book/detail': (context) => const BookDetailPage(),
       },
     );

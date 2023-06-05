@@ -35,7 +35,10 @@ class _RegisterGenrePageState extends ConsumerState<RegisterGenrePage> {
         ),
       ),
       bottomNavigationBar: RoundedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.pushReplacementNamed(context, '/home');
+        },
         label: 'Buat Akun Saya',
         enabled: ref.watch(registerGenreViewModel).selectedGenre.length >= 3,
       )

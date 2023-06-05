@@ -1,4 +1,3 @@
-import 'package:book_store/presentation/pages/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heroicons/heroicons.dart';
@@ -7,6 +6,8 @@ import 'package:styled_widget/styled_widget.dart';
 import '../../core/themes/theme.dart';
 import '../notifiers/bottom_nav/bottom_nav_notifier.dart';
 import 'home/home_page.dart';
+import 'mybook/mybook_page.dart';
+import 'profile/profile_page.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -28,10 +29,10 @@ class _MainPageState extends ConsumerState<MainPage> {
       body: PageView(
         controller: state.controller,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
-          const HomePage(),
-          Container(),
-          const ProfilePage(),
+        children: const [
+          HomePage(),
+          MyBookPage(),
+          ProfilePage(),
         ],
       ),
       resizeToAvoidBottomInset: false,

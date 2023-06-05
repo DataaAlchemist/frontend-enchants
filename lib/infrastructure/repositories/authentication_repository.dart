@@ -33,19 +33,20 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     required String password,
   }) async {
     try {
-      final response = await _client.post(
-        '/api/login',
-        data: {
-          'email': email,
-          'password': password,
-        },
-      );
-      final loginData = LoginResponse.fromJson(response.data);
+      // final response = await _client.post(
+      //   '/api/login',
+      //   data: {
+      //     'email': email,
+      //     'password': password,
+      //   },
+      // );
+      // final loginData = LoginResponse.fromJson(response.data);
+      await Future.delayed(const Duration(seconds: 1));
 
       _preferences.setString(PreferencesKey.tokenKey, 'true');
       // _preferences.setInt(PreferencesKey.userKey, loginData.data.id);
 
-      return loginData;
+      return LoginResponse(code: 200, success: true);
     } catch (e) {
       throw NetworkExceptions.getDioException(e);
     }
