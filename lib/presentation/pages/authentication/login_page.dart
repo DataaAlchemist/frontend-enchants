@@ -58,7 +58,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   // check email format using regex
                   if (!RegExp(r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$')
                       .hasMatch(email)) {
-                    return 'Email tidak valid';
+                    return 'Format email tidak valid';
                   }
                   
                   return null;

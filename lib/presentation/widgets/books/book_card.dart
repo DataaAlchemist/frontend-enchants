@@ -29,7 +29,6 @@ class _BookCardState extends State<BookCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           height: 210,
@@ -40,6 +39,7 @@ class _BookCardState extends State<BookCard> {
               image: NetworkImage(widget.imageUrl),
               fit: BoxFit.cover,
             ),
+            color: grey100Color,
             boxShadow: [
               BoxShadow(
                 color: const Color(0xff06070D).withOpacity(.12),

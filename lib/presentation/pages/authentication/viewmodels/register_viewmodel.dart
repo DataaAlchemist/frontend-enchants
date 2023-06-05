@@ -5,9 +5,24 @@ final registerViewModel =
     ChangeNotifierProvider.autoDispose((ref) => RegisterViewModel());
 
 class RegisterViewModel extends ChangeNotifier {
+  RegisterViewModel() {
+    for (var i = 11; i <= 100; i++) {
+      ages.add(i);
+    }
+  }
+  
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool isPasswordObscured = true;
   bool isConfirmPasswordObscured = true;
+  List<int> ages = [];
+
+  String? fullname;
+  int? selectedAge;
+  String? address;
+  String? email;
+  String? password;
+  String? confirmPassword;
 
   void togglePasswordObscure() {
     isPasswordObscured = !isPasswordObscured;
@@ -20,6 +35,10 @@ class RegisterViewModel extends ChangeNotifier {
   }
 
   void register(BuildContext context) async {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
     isLoading = true;
     notifyListeners();
     

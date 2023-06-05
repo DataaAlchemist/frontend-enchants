@@ -1,4 +1,3 @@
-import 'package:book_store/presentation/pages/notification/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +8,7 @@ import 'presentation/pages/authentication/register_genre_page.dart';
 import 'presentation/pages/authentication/register_page.dart';
 import 'presentation/pages/book/book_detail_page.dart';
 import 'presentation/pages/main_page.dart';
+import 'presentation/pages/notification/notification_page.dart';
 import 'presentation/pages/onboarding_page.dart';
 import 'providers.dart';
 import 'wrappers.dart';

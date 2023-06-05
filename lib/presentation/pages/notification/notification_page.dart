@@ -48,7 +48,6 @@ class _NotificationPageState extends State<NotificationPage> {
                 color: grey700Color,
               ),
             ),
-            SizedBox(height: 128),
           ],
         ),
       ),

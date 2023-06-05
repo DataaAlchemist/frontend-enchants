@@ -23,7 +23,7 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void login(BuildContext context) async {
-    if (formKey.currentState?.validate() == false) {
+    if (!formKey.currentState!.validate()) {
       return;
     }
     

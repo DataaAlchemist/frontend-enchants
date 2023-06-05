@@ -1,4 +1,3 @@
-import 'package:book_store/presentation/pages/authentication/viewmodels/register_genre_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -7,6 +6,7 @@ import '../../../core/themes/theme.dart';
 import '../../../infrastructure/models/genre.dart';
 import '../../widgets/enchant_chip.dart';
 import '../../widgets/rounded_button.dart';
+import 'viewmodels/register_genre_viewmodel.dart';
 
 class RegisterGenrePage extends ConsumerStatefulWidget {
   const RegisterGenrePage({super.key});
@@ -26,13 +26,7 @@ class _RegisterGenrePageState extends ConsumerState<RegisterGenrePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_rounded),
-          color: grey900Color,
-        ),
+        leading: const BackButton(color: grey900Color),
       ),
       bottomNavigationBar: RoundedButton(
         onPressed: () {
