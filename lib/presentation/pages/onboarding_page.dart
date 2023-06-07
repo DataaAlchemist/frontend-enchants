@@ -1,8 +1,8 @@
-import '../../core/themes/theme.dart';
-import '../widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import '../../core/themes/theme.dart';
+import '../widgets/rounded_button.dart';
 import '../widgets/secondary_button.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -21,13 +21,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: MediaQuery.of(context).padding.top + 16),
+                SizedBox(height: MediaQuery.of(context).padding.top),
                 Image(
                   image: const AssetImage('assets/study.png'),
                   width: size.width * 0.8,
@@ -45,7 +45,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 ).padding(horizontal: 20),
               ],
             ),
-            const SizedBox(height: 64),
+            const SizedBox(height: 32),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -83,11 +83,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 32),
               ],
             ),
           ],
         ),
-      ),
+      ).center(),
     );
   }
 }
