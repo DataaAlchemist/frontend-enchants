@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heroicons/heroicons.dart';
@@ -6,6 +8,12 @@ import 'package:styled_widget/styled_widget.dart';
 import '../../../core/themes/theme.dart';
 import '../../widgets/rounded_button.dart';
 import 'viewmodel/book_detail_viewmodel.dart';
+
+class BookDetailArgs {
+  final String bookId;
+
+  const BookDetailArgs(this.bookId);
+}
 
 class BookDetailPage extends ConsumerStatefulWidget {
   const BookDetailPage({super.key});
@@ -16,7 +24,19 @@ class BookDetailPage extends ConsumerStatefulWidget {
 
 class _BookDetailPageState extends ConsumerState<BookDetailPage> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)!.settings.arguments as BookDetailArgs;
+      ref.read(bookDetailViewModel(args.bookId).notifier).initialize();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as BookDetailArgs;
+    final mediaQuery = MediaQuery.of(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -53,7 +73,7 @@ class _BookDetailPageState extends ConsumerState<BookDetailPage> {
             ),
             RoundedButton(
               onPressed: () {
-                ref.read(bookDetailViewModel).pinjamBuku(context);
+                // ref.read(bookDetailViewModel).pinjamBuku(context);
               },
               label: 'Pinjam Buku',
               horizontalPadding: 40,
@@ -68,120 +88,150 @@ class _BookDetailPageState extends ConsumerState<BookDetailPage> {
               color: Colors.black.withOpacity(0.1),
             ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 221,
-                  height: 338,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(defaultBorderRadius),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                          'https://cdnwpseller.gramedia.net/wp-content/uploads/2021/10/06103314/laut-bercerita.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(0, 7),
-                        blurRadius: 14,
-                        color: Colors.black.withOpacity(0.1),
-                      ),
+      body: Consumer(
+        builder: (context, ref, child) {
+          final vm =
+              ref.watch(bookDetailViewModel(args.bookId)) as BookDetailState;
+
+          return vm.when(
+            initial: () => _buildLoadingState(),
+            loaded: (book) {
+              return RefreshIndicator(
+                onRefresh: ref
+                    .read(bookDetailViewModel(args.bookId).notifier)
+                    .initialize,
+                displacement: 32 + mediaQuery.padding.top,
+                edgeOffset: 32 + mediaQuery.padding.top,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 221,
+                            height: 338,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(defaultBorderRadius),
+                              image: DecorationImage(
+                                image: NetworkImage(book.image),
+                                fit: BoxFit.cover,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(0, 7),
+                                  blurRadius: 14,
+                                  color: Colors.black.withOpacity(0.1),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            book.title,
+                            style: const TextStyle(
+                              fontFamily: 'Playfair Display',
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            book.author.name,
+                            style: const TextStyle(
+                              color: grey500Color,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              HeroIcon(
+                                HeroIcons.star,
+                                color: yellowColor,
+                                style: HeroIconStyle.solid,
+                                size: 20,
+                              ),
+                              SizedBox(width: 4),
+                              HeroIcon(
+                                HeroIcons.star,
+                                color: yellowColor,
+                                style: HeroIconStyle.solid,
+                                size: 20,
+                              ),
+                              SizedBox(width: 4),
+                              HeroIcon(
+                                HeroIcons.star,
+                                color: yellowColor,
+                                style: HeroIconStyle.solid,
+                                size: 20,
+                              ),
+                              SizedBox(width: 4),
+                              HeroIcon(
+                                HeroIcons.star,
+                                color: yellowColor,
+                                style: HeroIconStyle.solid,
+                                size: 20,
+                              ),
+                              SizedBox(width: 4),
+                              HeroIcon(
+                                HeroIcons.star,
+                                color: yellowColor,
+                                style: HeroIconStyle.solid,
+                                size: 20,
+                              ),
+                              SizedBox(width: 8),
+                              Text('4.8 (4K)'),
+                            ],
+                          ),
+                        ],
+                      ).center(),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Sinopsis',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ).padding(horizontal: 20),
+                      const SizedBox(height: 6),
+                      Text(
+                        book.description,
+                        style: const TextStyle(color: grey700Color),
+                      ).padding(horizontal: 20),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Tentang Penulis',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ).padding(horizontal: 20),
+                      const SizedBox(height: 6),
+                      const Text(
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                        style: TextStyle(color: grey700Color),
+                      ).padding(horizontal: 20),
+                      const SizedBox(height: 64),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Laut Bercerita',
-                  style: TextStyle(
-                    fontFamily: 'Playfair Display',
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Leila S. Chudori',
-                  style: TextStyle(
-                    color: grey500Color,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    HeroIcon(
-                      HeroIcons.star,
-                      color: yellowColor,
-                      style: HeroIconStyle.solid,
-                      size: 20,
-                    ),
-                    SizedBox(width: 4),
-                    HeroIcon(
-                      HeroIcons.star,
-                      color: yellowColor,
-                      style: HeroIconStyle.solid,
-                      size: 20,
-                    ),
-                    SizedBox(width: 4),
-                    HeroIcon(
-                      HeroIcons.star,
-                      color: yellowColor,
-                      style: HeroIconStyle.solid,
-                      size: 20,
-                    ),
-                    SizedBox(width: 4),
-                    HeroIcon(
-                      HeroIcons.star,
-                      color: yellowColor,
-                      style: HeroIconStyle.solid,
-                      size: 20,
-                    ),
-                    SizedBox(width: 4),
-                    HeroIcon(
-                      HeroIcons.star,
-                      color: yellowColor,
-                      style: HeroIconStyle.solid,
-                      size: 20,
-                    ),
-                    SizedBox(width: 8),
-                    Text('4.8 (4K)'),
-                  ],
-                ),
-              ],
-            ).center(),
-            const SizedBox(height: 24),
-            const Text(
-              'Sinopsis',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ).padding(horizontal: 20),
-            const SizedBox(height: 6),
-            const Text(
-              'Laut Bercerita, novel terbaru Leila S. Chudori, bertutur tentang kisah keluarga yang kehilangan, sekumpulan sahabat yang merasakan kekosongan di dada, sekelompok orang yang gemar menyiksa dan lancar berkhianat, sejumlah keluarga yang mencari kejelasan akan anaknya, dan tentang cinta yang tak akan luntur.',
-              style: TextStyle(color: grey700Color),
-            ).padding(horizontal: 20),
-            const SizedBox(height: 16),
-            const Text(
-              'Tentang Penulis',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ).padding(horizontal: 20),
-            const SizedBox(height: 6),
-            const Text(
-              'Leila Salikha Chudori adalah penulis Indonesia yang menghasilkan berbagai karya cerita pendek, novel, dan skenario drama televisi. Leila S. Chudori bercerita tentang kejujuran, keyakinan, dan tekad, prinsip dan pengorbanan.',
-              style: TextStyle(color: grey700Color),
-            ).padding(horizontal: 20),
-            const SizedBox(height: 64),
-          ],
-        ),
+              );
+            },
+            error: (message) {
+              return Center(
+                child: Text(message),
+              );
+            },
+          );
+        },
       ),
     );
+  }
+
+  Widget _buildLoadingState() {
+    return const Center(child: CircularProgressIndicator());
   }
 }

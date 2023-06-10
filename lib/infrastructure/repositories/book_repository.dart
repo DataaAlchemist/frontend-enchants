@@ -12,6 +12,7 @@ final bookRepository = Provider<BookRepository>((ref) {
 
 abstract class BookRepository {
   Future<BookResponse> getBooks();
+  Future<Book> getBook(String id);
 }
 
 class BookRepositoryImpl implements BookRepository {
@@ -29,6 +30,19 @@ class BookRepositoryImpl implements BookRepository {
       final book = BookResponse.fromJson(response.data);
       
       return book;
+    } catch (e) {
+      throw NetworkExceptions.getDioException(e);
+    }
+  }
+  
+  @override
+  Future<Book> getBook(String id) async {
+    try {
+      final response = await _client.get(
+        '/api/book/$id',
+      );
+
+      return Book.fromJson(response.data);
     } catch (e) {
       throw NetworkExceptions.getDioException(e);
     }

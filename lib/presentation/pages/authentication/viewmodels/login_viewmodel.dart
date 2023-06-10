@@ -17,6 +17,9 @@ class LoginViewModel extends ChangeNotifier {
   bool isLoading = false;
   bool isObscured = true;
 
+  String email = '';
+  String password = '';
+
   void toggleObscure() {
     isObscured = !isObscured;
     notifyListeners();
@@ -26,12 +29,14 @@ class LoginViewModel extends ChangeNotifier {
     if (!formKey.currentState!.validate()) {
       return;
     }
+
+    formKey.currentState!.save();
     
     isLoading = true;
     notifyListeners();
 
     try {
-      await _ref.read(authenticationRepository).login(email: '', password: '');
+      await _ref.read(authenticationRepository).login(email: email, password: password);
 
       // reset password visibility
       isObscured = true;

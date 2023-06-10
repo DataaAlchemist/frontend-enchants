@@ -3,10 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../../core/themes/theme.dart';
-import '../../../infrastructure/models/genre.dart';
 import '../../widgets/enchant_chip.dart';
 import '../../widgets/rounded_button.dart';
-import 'viewmodels/register_genre_viewmodel.dart';
+import 'viewmodels/register_viewmodel.dart';
 
 class RegisterGenrePage extends ConsumerStatefulWidget {
   const RegisterGenrePage({super.key});
@@ -19,7 +18,6 @@ class _RegisterGenrePageState extends ConsumerState<RegisterGenrePage> {
   @override
   Widget build(BuildContext context) {
     final padding = MediaQuery.of(context).padding;
-    // final size = MediaQuery.of(context).size;
 
     return Scaffold(
       extendBody: true,
@@ -30,11 +28,10 @@ class _RegisterGenrePageState extends ConsumerState<RegisterGenrePage> {
       ),
       bottomNavigationBar: RoundedButton(
         onPressed: () {
-          Navigator.popUntil(context, (route) => route.isFirst);
-          Navigator.pushReplacementNamed(context, '/home');
+          ref.read(registerViewModel).createAccount(context);
         },
         label: 'Buat Akun Saya',
-        enabled: ref.watch(registerGenreViewModel).selectedGenre.length >= 3,
+        enabled: ref.watch(registerViewModel).selectedGenre.length >= 3,
       )
           .boxShadow(
             offset: const Offset(0, 2),
@@ -61,22 +58,25 @@ class _RegisterGenrePageState extends ConsumerState<RegisterGenrePage> {
               style: TextStyle(color: grey500Color),
             ),
             const SizedBox(height: 24),
-            Wrap(
-              spacing: 8,
-              runSpacing: 12,
-              children: genreList.map((genre) {
-                return EnchantChip(
-                  onPressed: () {
-                    ref.read(registerGenreViewModel).addGenre(genre);
-                  },
-                  label: genre.name,
-                  isActive: ref
-                      .watch(registerGenreViewModel)
-                      .selectedGenre
-                      .contains(genre),
-                );
-              }).toList(),
-            ),
+            if (ref.watch(registerViewModel).isLoading)
+              const CircularProgressIndicator()
+            else
+              Wrap(
+                spacing: 8,
+                runSpacing: 12,
+                children: ref.watch(registerViewModel).genres.map((genre) {
+                  return EnchantChip(
+                    onPressed: () {
+                      ref.read(registerViewModel).addGenre(genre);
+                    },
+                    label: genre.genre,
+                    isActive: ref
+                        .watch(registerViewModel)
+                        .selectedGenre
+                        .contains(genre),
+                  );
+                }).toList(),
+              ),
             SizedBox(height: MediaQuery.of(context).padding.bottom + 64 + 16),
           ],
         ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/themes/theme.dart';
+import 'core/utils/supabase_client.dart';
 import 'presentation/pages/authentication/login_page.dart';
 import 'presentation/pages/authentication/register_genre_page.dart';
 import 'presentation/pages/authentication/register_page.dart';
@@ -17,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final preferences = await SharedPreferences.getInstance();
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
 
   runApp(ProviderScope(
     overrides: [

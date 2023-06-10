@@ -63,6 +63,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   
                   return null;
                 },
+                onSaved: (value) {
+                  ref.read(loginViewModel).email = value!;
+                },
                 decoration: const InputDecoration(
                   hintText: 'Masukkan alamat email',
                 ),
@@ -79,6 +82,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   }
 
                   return null;
+                },
+                onSaved: (value) {
+                  ref.read(loginViewModel).password = value!;
                 },
                 obscureText: ref.watch(loginViewModel).isObscured,
                 decoration: InputDecoration(

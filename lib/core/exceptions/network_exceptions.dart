@@ -53,7 +53,8 @@ class NetworkExceptions with _$NetworkExceptions {
               networkExceptions = const NetworkExceptions.requestTimeout();
               break;
             case DioErrorType.connectionError:
-              networkExceptions = const NetworkExceptions.noInternetConnection();
+              networkExceptions =
+                  const NetworkExceptions.noInternetConnection();
               break;
             case DioErrorType.receiveTimeout:
               networkExceptions = const NetworkExceptions.sendTimeout();
@@ -67,15 +68,17 @@ class NetworkExceptions with _$NetworkExceptions {
                   networkExceptions = const NetworkExceptions.requestTimeout();
                   break;
                 case 500:
-                  networkExceptions = const NetworkExceptions.internalServerError();
+                  networkExceptions =
+                      const NetworkExceptions.internalServerError();
                   break;
                 case 503:
-                  networkExceptions = const NetworkExceptions.serviceUnavailable();
+                  networkExceptions =
+                      const NetworkExceptions.serviceUnavailable();
                   break;
                 default:
-                  if ((error.response?.data) == 'Unauthorized.') {
+                  if ((error.response?.data) == 'These credentials do not match our records.') {
                     networkExceptions = NetworkExceptions.defaultError(
-                      'Unauthorized',
+                      'These credentials do not match our records',
                       error.response,
                     );
                   } else {

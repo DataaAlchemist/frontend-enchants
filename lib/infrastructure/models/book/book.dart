@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+import 'author.dart';
+import 'book_genre.dart';
+
 class BookResponse {
   final List<Book> books;
 
@@ -10,7 +13,6 @@ class BookResponse {
     for (final book in json) {
       books.add(Book.fromJson(book));
     }
-    print('hehe $books');
     return BookResponse(books);
   }
 }
@@ -18,58 +20,31 @@ class BookResponse {
 class Book extends Equatable {
   final String isbn;
   final String title;
-  final String author;
-  final String genre;
-  final String ratings;
-  final String? image;
-  final String price;
-  final String sinopsis;
+  final Author author;
+  final BookGenre genre;
+  final String description;
+  final String image;
 
   const Book({
     required this.isbn,
     required this.title,
     required this.author,
     required this.genre,
-    required this.ratings,
-    this.image,
-    required this.price,
-    required this.sinopsis,
+    required this.description,
+    required this.image,
   });
-
+  
   @override
-  List<Object?> get props => [
-        isbn,
-        title,
-        author,
-        genre,
-        ratings,
-        image,
-        price,
-        sinopsis,
-      ];
+  List<Object?> get props => [isbn, title, author, genre, description, image];
 
   factory Book.fromJson(Map<String, dynamic> json) {
     return Book(
-      author: json['author'],
-      genre: json['genre'],
-      isbn: json['isbn'],
-      price: json['price'],
-      ratings: json['ratings'],
-      sinopsis: json['sinopsis'],
-      title: json['title'],
+      isbn: json['isbn'] as String,
+      title: json['title'] as String,
+      author: Author.fromJson(json['author'] as Map<String, dynamic>),
+      genre: BookGenre.fromJson(json['genre'] as Map<String, dynamic>),
+      description: json['description'] as String,
+      image: json['image'] as String,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'isbn': isbn,
-      'title': title,
-      'author': author,
-      'genre': genre,
-      'ratings': ratings,
-      'image': image,
-      'price': price,
-      'sinopsis': sinopsis,
-    };
   }
 }

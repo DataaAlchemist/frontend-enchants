@@ -1,3 +1,4 @@
+import 'package:book_store/presentation/pages/book/book_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -128,15 +129,15 @@ class _HomePageState extends ConsumerState<HomePage>
                     final book = ref.watch(recommendedNotifier).items[index];
                     return BookCard(
                       onPressed: () {
-                        // Navigator.pushNamed(
-                        //   context,
-                        //   '/book/detail',
-                        //   arguments: book,
-                        // );
+                        Navigator.pushNamed(
+                          context,
+                          '/book/detail',
+                          arguments: BookDetailArgs(book.isbn),
+                        );
                       },
-                      imageUrl: book.image ?? '',
+                      imageUrl: book.image,
                       title: book.title,
-                      author: book.author,
+                      author: book.author.name,
                       rating: '5.0 (2.5K)',
                     ).padding(right: 16);
                   },

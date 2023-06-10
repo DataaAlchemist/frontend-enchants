@@ -26,7 +26,7 @@ class RecommendedNotifier extends ChangeNotifier {
 
       items = response.books;
     } catch (e) {
-      fetch();
+      // fetch();
     }
     isLoading = false;
     notifyListeners();
