@@ -1,4 +1,3 @@
-import 'package:book_store/presentation/pages/book/book_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -7,6 +6,8 @@ import '../../../core/themes/theme.dart';
 import '../../widgets/books/book_card.dart';
 import '../../widgets/books/shimmer_book_card.dart';
 import '../../widgets/enchant_icon_button.dart';
+import '../book/book_detail_page.dart';
+import '../search/search_page.dart';
 import 'viewmodels/home_viewmodel.dart';
 import 'viewmodels/recommended_notifier.dart';
 
@@ -70,8 +71,15 @@ class _HomePageState extends ConsumerState<HomePage>
                 ],
               ).padding(horizontal: 20),
               const SizedBox(height: 24),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                onSubmitted: (query) {
+                  Navigator.pushNamed(
+                    context,
+                    '/search',
+                    arguments: SearchArgs(query),
+                  );
+                },
+                decoration: const InputDecoration(
                   hintText: 'Cari',
                   border: InputBorder.none,
                   prefixIcon: Icon(Icons.search_rounded),

@@ -4,25 +4,33 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const baseUrl = 'http://localhost:8000';
-
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
 const _defaultReceiveTimeout = Duration.millisecondsPerMinute;
 
-final dioClient = Provider((ref) => DioClient(Dio()));
+final dioClient = Provider(
+  (ref) => DioClient(Dio(), baseUrl: 'https://api-enchants.vercel.app'),
+);
+
+final dioClient2 = Provider(
+  (ref) => DioClient(Dio(), baseUrl: 'https://api-enchants.vercel.app'),
+);
 
 class DioClient {
   final Dio _dio;
   final List<Interceptor>? interceptors;
+  final String baseUrl;
 
   DioClient(
     this._dio, {
     this.interceptors,
+    required this.baseUrl,
   }) {
     _dio
       ..options.baseUrl = baseUrl
-      ..options.connectTimeout = const Duration(milliseconds: _defaultConnectTimeout)
-      ..options.receiveTimeout = const Duration(milliseconds: _defaultReceiveTimeout)
+      ..options.connectTimeout =
+          const Duration(milliseconds: _defaultConnectTimeout)
+      ..options.receiveTimeout =
+          const Duration(milliseconds: _defaultReceiveTimeout)
       ..httpClientAdapter
       ..options.headers = {
         HttpHeaders.acceptHeader: 'application/json',

@@ -44,7 +44,7 @@ class _HomeRecommendedBooksState extends ConsumerState<HomeRecommendedBooks> {
             //   arguments: book,
             // );
           },
-          imageUrl: book.image ?? '',
+          imageUrl: book.image,
           title: book.title,
           author: book.author.name,
           rating: '5.0 (2.5K)',

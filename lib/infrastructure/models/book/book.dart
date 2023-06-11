@@ -33,7 +33,7 @@ class Book extends Equatable {
     required this.description,
     required this.image,
   });
-  
+
   @override
   List<Object?> get props => [isbn, title, author, genre, description, image];
 
@@ -41,8 +41,10 @@ class Book extends Equatable {
     return Book(
       isbn: json['isbn'] as String,
       title: json['title'] as String,
-      author: Author.fromJson(json['author'] as Map<String, dynamic>),
-      genre: BookGenre.fromJson(json['genre'] as Map<String, dynamic>),
+      // author: Author.fromJson(json['author'] as Map<String, dynamic>),
+      // genre: BookGenre.fromJson(json['genre'] as Map<String, dynamic>),
+      author: Author(id: json['author']['_id'], name: json['author']['author']),
+      genre: BookGenre(id: json['genre']['_id'], genre: json['genre']['genre']),
       description: json['description'] as String,
       image: json['image'] as String,
     );

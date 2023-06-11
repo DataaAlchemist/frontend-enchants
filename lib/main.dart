@@ -12,6 +12,7 @@ import 'presentation/pages/book/book_detail_page.dart';
 import 'presentation/pages/main_page.dart';
 import 'presentation/pages/notification/notification_page.dart';
 import 'presentation/pages/onboarding_page.dart';
+import 'presentation/pages/search/search_page.dart';
 import 'providers.dart';
 import 'wrappers.dart';
 
@@ -76,6 +77,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const MainPage(),
         '/notifications': (context) => const NotificationPage(),
         '/book/detail': (context) => const BookDetailPage(),
+        '/search': (context) => const SearchPage(),
       },
     );
   }

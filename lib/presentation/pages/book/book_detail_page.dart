@@ -1,12 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import '../../../core/themes/theme.dart';
+import '../../widgets/books/book_card.dart';
 import '../../widgets/rounded_button.dart';
+import '../home/viewmodels/recommended_notifier.dart';
 import 'viewmodel/book_detail_viewmodel.dart';
 
 class BookDetailArgs {
@@ -132,12 +132,13 @@ class _BookDetailPageState extends ConsumerState<BookDetailPage> {
                           const SizedBox(height: 16),
                           Text(
                             book.title,
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontFamily: 'Playfair Display',
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
                             ),
-                          ),
+                          ).padding(horizontal: 20),
                           const SizedBox(height: 4),
                           Text(
                             book.author.name,
@@ -196,7 +197,9 @@ class _BookDetailPageState extends ConsumerState<BookDetailPage> {
                       const Text(
                         'Sinopsis',
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ).padding(horizontal: 20),
                       const SizedBox(height: 6),
                       Text(
@@ -205,15 +208,50 @@ class _BookDetailPageState extends ConsumerState<BookDetailPage> {
                       ).padding(horizontal: 20),
                       const SizedBox(height: 16),
                       const Text(
-                        'Tentang Penulis',
+                        'Tentang penulis',
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ).padding(horizontal: 20),
                       const SizedBox(height: 6),
                       const Text(
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                         style: TextStyle(color: grey700Color),
                       ).padding(horizontal: 20),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Mungkin anda juga suka',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ).padding(horizontal: 20),
+                      const SizedBox(height: 12),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final book =
+                              ref.watch(recommendedNotifier).items[index];
+                          return BookCard(
+                            onPressed: () {
+                              // Navigator.pushNamed(
+                              //   context,
+                              //   '/book/detail',
+                              //   arguments: book,
+                              // );
+                            },
+                            imageUrl: book.image,
+                            title: book.title,
+                            author: book.author.name,
+                            rating: '5.0 (2.5K)',
+                          ).padding(right: 16);
+                        },
+                        itemCount: ref.watch(recommendedNotifier).items.length,
+                      ).height(316),
                       const SizedBox(height: 64),
                     ],
                   ),
