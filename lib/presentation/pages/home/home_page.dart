@@ -1,3 +1,4 @@
+import 'package:book_store/presentation/pages/search/viewmodels/search_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -78,6 +79,8 @@ class _HomePageState extends ConsumerState<HomePage>
                     '/search',
                     arguments: SearchArgs(query),
                   );
+
+                  ref.read(searchViewModel.notifier).search(query);
                 },
                 decoration: const InputDecoration(
                   hintText: 'Cari',

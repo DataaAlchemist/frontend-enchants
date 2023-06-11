@@ -12,7 +12,7 @@ final dioClient = Provider(
 );
 
 final dioClient2 = Provider(
-  (ref) => DioClient(Dio(), baseUrl: 'https://api-enchants.vercel.app'),
+  (ref) => DioClient(Dio(), baseUrl: 'https://api-enchants-ml.herokuapp.com'),
 );
 
 class DioClient {

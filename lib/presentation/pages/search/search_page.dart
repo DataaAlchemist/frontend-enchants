@@ -1,7 +1,10 @@
-import 'package:book_store/core/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:styled_widget/styled_widget.dart';
+
+import '../../../core/themes/theme.dart';
+import '../../../infrastructure/models/book/book_search.dart';
+import 'viewmodels/search_viewmodel.dart';
 
 class SearchArgs {
   final String query;
@@ -20,6 +23,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as SearchArgs?;
+    final vm = ref.watch(searchViewModel);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,19 +40,38 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         foregroundColor: grey900Color,
       ),
-      body: ListView.builder(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buildBookList();
+      body: vm.when(
+        initial: () {
+          ref.read(searchViewModel.notifier).search(args.query);
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+        loaded: (books) {
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            itemCount: books.length,
+            itemBuilder: (context, index) {
+              return _buildBookList(books[index]);
+            },
+          );
+        },
+        error: (message) {
+          return Center(
+            child: Text(
+              message,
+              style: const TextStyle(color: grey500Color),
+            ),
+          );
         },
       ),
     );
   }
 
-  Widget _buildBookList() {
+  Widget _buildBookList(BookSearch book) {
     return Row(
       children: [
         Container(
@@ -64,22 +87,26 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 blurRadius: 14,
               )
             ],
+            image: DecorationImage(
+              image: NetworkImage(book.image),
+              fit: BoxFit.cover,
+            )
           ),
         ),
         const SizedBox(width: 16),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'The Alchemist',
-              style: TextStyle(
+              book.title,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(
-              'Paulo Coelho',
-              style: TextStyle(
+              book.author,
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 color: grey500Color,
               ),
@@ -88,20 +115,20 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.star_rounded, color: yellowColor, size: 20),
-                SizedBox(width: 2),
+                const Icon(Icons.star_rounded, color: yellowColor, size: 20),
+                const SizedBox(width: 2),
                 Text(
-                  '4.9 (200K)',
-                  style: TextStyle(fontSize: 12),
+                  '4.9 (${book.ratingsCount})',
+                  style: const TextStyle(fontSize: 12),
                   textAlign: TextAlign.left,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
               ],
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae nisi eget nunc ultricies aliquet.',
-              style: TextStyle(
+              book.description,
+              style: const TextStyle(
                 color: grey500Color,
               ),
               maxLines: 2,

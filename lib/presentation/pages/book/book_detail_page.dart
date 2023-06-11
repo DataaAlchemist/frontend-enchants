@@ -1,3 +1,4 @@
+import 'package:book_store/presentation/pages/book/viewmodel/book_detail_recommendations_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:heroicons/heroicons.dart';
@@ -29,6 +30,9 @@ class _BookDetailPageState extends ConsumerState<BookDetailPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args = ModalRoute.of(context)!.settings.arguments as BookDetailArgs;
       ref.read(bookDetailViewModel(args.bookId).notifier).initialize();
+      ref
+          .read(bookDetailRecommendationsViewModel(args.bookId).notifier)
+          .initialize();
     });
   }
 
@@ -228,30 +232,43 @@ class _BookDetailPageState extends ConsumerState<BookDetailPage> {
                         ),
                       ).padding(horizontal: 20),
                       const SizedBox(height: 12),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          final book =
-                              ref.watch(recommendedNotifier).items[index];
-                          return BookCard(
-                            onPressed: () {
-                              // Navigator.pushNamed(
-                              //   context,
-                              //   '/book/detail',
-                              //   arguments: book,
-                              // );
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final recVm = ref.watch(
+                              bookDetailRecommendationsViewModel(args.bookId));
+
+                          return recVm.when(
+                            initial: () => _buildLoadingState(),
+                            loaded: (books) {
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: books.length - 1,
+                                itemBuilder: (context, index) {
+                                  final item = books[index + 1];
+
+                                  return BookCard(
+                                    onPressed: () {},
+                                    imageUrl: item.image,
+                                    title: item.title,
+                                    author: item.author,
+                                    rating:
+                                        '5.0 (${item.ratingsCount})',
+                                  ).padding(right: 16);
+                                },
+                              ).height(316);
                             },
-                            imageUrl: book.image,
-                            title: book.title,
-                            author: book.author.name,
-                            rating: '5.0 (2.5K)',
-                          ).padding(right: 16);
+                            error: (message) {
+                              return Center(
+                                child: Text(message),
+                              );
+                            },
+                          );
                         },
-                        itemCount: ref.watch(recommendedNotifier).items.length,
-                      ).height(316),
+                      ),
                       const SizedBox(height: 64),
                     ],
                   ),

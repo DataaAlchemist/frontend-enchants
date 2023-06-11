@@ -4,9 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/exceptions/network_exceptions.dart';
 import '../../core/utils/constants.dart';
 import '../../core/utils/dio_client.dart';
-import '../../core/utils/preferences_key.dart';
 import '../../providers.dart';
-import '../models/auth/login_response.dart';
 import '../models/auth/user.dart';
 import '../models/book/book_genre.dart';
 
