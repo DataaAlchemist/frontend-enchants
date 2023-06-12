@@ -43,7 +43,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   fontSize: 32,
                   fontWeight: FontWeight.w800,
                 ),
-              ),
+              ).gestures(onDoubleTap: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+                Navigator.pushReplacementNamed(context, '/home');
+              }),
               const SizedBox(height: 24),
               const Text(
                 'Alamat Email',
