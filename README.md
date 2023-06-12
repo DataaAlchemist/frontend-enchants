@@ -1,16 +1,20 @@
-# book_store
+# Enchants
 
-A new Flutter project.
+## 📕 Background
+Enchants is a book exploration and borrowing with recommender system implemented.
 
-## Getting Started
+## 🏗️ Project Structure
 
-This project is a starting point for a Flutter application.
+This flutter sourcecode consists of 3 main folder:
+1. `core`,
+2. `infrastructures`, and
+3. `presentation`.
 
-A few resources to get you started if this is your first Flutter project:
+### Core
+This folder contains the core of the application. It holds the most basic and important part of the application like theming or helpers.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Infrastructures
+As the name implies, this folder contains the infrastructures of the application. It holds the data layer of the application. Infrastructures folder is responsible for handling the data flow of the application and contains the data models of the application.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Presentation
+This folder is the face of the application. It holds the UI layer of the application. Presentation folder is responsible for handling the UI flow of the application and contains the views and its UI components.
